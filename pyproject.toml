@@ -1,0 +1,25 @@
+[project]
+name = "4clicks"
+version = "0.1.0"
+description = "An API to manage terraform projects, inventory and tasks"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.16.4",
+    "asyncpg>=0.30.0",
+    "cryptography>=45.0.6",
+    "fastapi[standard]>=0.116.1",
+    "python-hcl2>=7.3.1",
+    "sqlalchemy[asyncio]>=2.0.43",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "mypy>=1.17.1",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.2.1",
+    "ruff>=0.12.8",
+    "trio>=0.30.0",
+]

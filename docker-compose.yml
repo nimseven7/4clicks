@@ -1,0 +1,46 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    image: 4-clicks-deploy-api:prod
+    environment:
+      - ENV=${ENV:-preprod}
+      - DEBUG=${DEBUG:-true}
+      - PYTHONUNBUFFERED=1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-eu-west-3}
+      - SSH_KEY_ENCRYPTION_KEY=${SSH_KEY_ENCRYPTION_KEY}
+    ports:
+      - "5678:5678"
+    volumes:
+      - ./app:/home/fclicks/app
+      - ./tasks:/home/fclicks/tasks
+      - ./.ssh:/home/fclicks/.ssh
+      - ./infra:/home/fclicks/infra
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17.5
+    shm_size: 256mb
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-4clicks-dev}
+    ports:
+      - "5432:5432" # for dev purposes only
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # Comment those two lines if you want to use the default postgres configuration
+      # Those two lines will make migration easier
+      - ./postgresql/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./postgresql/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    restart: unless-stopped
+
+volumes:
+  db_data:

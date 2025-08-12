@@ -1,0 +1,24 @@
+# IDE
+.DS_Store
+
+# Python artifacts
+*.pyc
+.venv
+
+# Terraform state files
+terraform.tfstate*
+
+# Coverage reports
+.coverage
+htmlcov
+junit.xml
+coverage.xml
+
+# Environment variables
+.env
+
+# gitlab-ci-local
+.gitlab-ci-local
+
+# SSL certificates and certbot data
+certbot/
